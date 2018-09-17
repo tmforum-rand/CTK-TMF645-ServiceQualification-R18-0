@@ -1,0 +1,1318 @@
+{
+	"info": {
+		"_postman_id": "a864faa9-d26e-4bae-997d-336f323a7c49",
+		"name": "CTK-TMF645-ServiceQualification",
+		"description": "## TMF API Reference: TMF645 - Service Qualification\n\n### Release : 18.0 - February 2018\n\nService Qualification API is one of Pre-Ordering Management API Family. Service Qualification API goal is to provide service technical eligibility. \n\n### Resource \n- serviceQualification\n\n### Operations\nService Qualification API performs the following operations on the resource :\n- Retrieve an entity or a collection of entities depending on filter criteria\n- Partial update of an entity (including updating rules)\n- Create an entity (including default values and creation rules)\n- Delete an entity (for administration purposes)\n- Manage notification of events",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"_postman_id": "b75a8de4-f44f-4ee9-96f9-7637e007f924",
+			"name": "TC_ServiceQualification_N1 – Create new ServiceQualification",
+			"item": [
+				{
+					"_postman_id": "176b53fb-27f4-4d0f-9fce-c1eebb74a31b",
+					"name": "TC_N1_Create a service qualification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9511d98f-4087-48ec-8f1d-e227d1c429ef",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing POST method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Successful POST request', function() { pm.expect(pm.response.code).to.be.oneOf([201,202]) });",
+									"",
+									"",
+									"var instance = pm.response.json();",
+									"",
+									"",
+									"// Checking all remaining possible attributes for ServiceQualification, taken from the Swagger file",
+									"pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"pm.test('Response has href attribute', function() { pm.expect(instance.href).to.be.a('string'); });",
+									"pm.test('Response has serviceQualificationDate attribute', function() { pm.expect(instance.serviceQualificationDate).to.be.a('string'); });",
+									"pm.test('Response has state attribute', function() { pm.expect(instance.state).to.be.a('string'); });",
+									"pm.test('Response has serviceQualificationItem', function() { pm.expect(instance.serviceQualificationItem).to.be.an('array');});",
+									"var i = 0;",
+									"instance.serviceQualificationItem.forEach(function(element){",
+									"   ",
+									"   pm.test('Responde has serviceQualificationItem.state for all items on array ('+i+')',function(){",
+									"      pm.expect(element.state).to.be.a('string'); ",
+									"      i++;   ",
+									"   }",
+									"   ",
+									"   );",
+									"   ",
+									"});",
+									"",
+									"//set globals",
+									"pm.globals.set(\"IDSQ1\", instance.id);",
+									"pm.globals.set(\"HREFSQ1\", instance.href);",
+									"pm.globals.set(\"SERVICEQUALIFICATIONDATESQ1\", instance.serviceQualificationDate);",
+									"pm.globals.set(\"STATESQ1\", instance.state);",
+									"pm.globals.set(\"SERVICEQUALIFICATIONITEMSQ1\", instance.serviceQualificationItem);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Deliver access and IPTV at a given address\",\n  \"expectedQualificationDate\": \"2017-10-01T12:13:16.361Z\",\n  \"provideAlternative\": true,\n  \"provideUnavailabilityReason\": false,\n  \"relatedParty\": [\n    {\n      \"id\": \"15\",\n      \"href\": \"https://host:port/partyManagement/individual/15\",\n      \"role\": \"requester\",\n      \"name\": \"Mary Stuart\"\n    }\n  ],\n  \"serviceQualificationItem\": [\n    {\n      \"id\": \"1\",\n      \"expectedServiceAvailabilityDate\": \"2017-10-27T12:14:16.361Z\",\n      \"service\": {\n        \"serviceSpecification\":{\n          \"id\": \"111\",\n          \"href\":\n          \"https://host:port/serviceCatalog/serviceSpecification/111\",\n          \"name\": \"CFS_Access\"\n        },\n        \"characteristic\": [\n          {\n            \"name\": \"downloadSpeed\",\n            \"value\": \"\"\n          },\n          {\n            \"name\": \"uploadSpeed\",\n            \"value\": \"\"\n          }\n        ]\n        \n      }\n    },\n    {\n      \"id\": \"2\",\n      \"expectedServiceAvailabilityDate\": \"2017-10-27T12:14:16.361Z\",\n      \"service\": {\n        \"serviceSpecification\":{\n          \"id\": \"222\",\n          \"href\":\n          \"https://host:port/serviceCatalog/serviceSpecification/222\",\n          \"name\": \"CFS_IPTV\"\n        },\n        \"characteristic\": [\n          {\n            \"name\": \"4kEnabled\",\n            \"value\": \"true\"\n          }\n        ]\n      },\n      \"qualificationItemRelationship\": [\n        {\n          \"type\": \"reliesOn\",\n          \"id\": \"1\"\n        }\n      ]\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification"
+							]
+						},
+						"description": "This operation creates a service qualification entity.\nMandatory and non mandatory attributes, additional rules and default values are provided in the specifications document.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "58fb32a6-866f-4594-8aa7-16177b0b7883",
+					"name": "TC_N1_Get a serviceQualification by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1079fc17-b427-4b47-a8d6-8ed2acff1598",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing GET method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification/:id?fields={{fields}}",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Response code to good GET request', function() { pm.expect(pm.response.code).to.be.oneOf([200,206]) });",
+									"pm.test('GET response has valid JSON body', function() { pm.response.to.have.jsonBody() });",
+									"",
+									"",
+									"var instance = pm.response.json();",
+									"",
+									"",
+									"pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"pm.test('Response has href attribute', function() { pm.expect(instance.href).to.be.a('string'); });",
+									"pm.test('Response has serviceQualificationDate attribute', function() { pm.expect(instance.serviceQualificationDate).to.be.a('string'); });",
+									"pm.test('Response has state attribute', function() { pm.expect(instance.state).to.be.a('string'); });",
+									"pm.test('Response has serviceQualificationItem', function() { pm.expect(instance.serviceQualificationItem).to.be.an('array');});",
+									"var i = 0;",
+									"instance.serviceQualificationItem.forEach(function(element){",
+									"   ",
+									"   pm.test('Response has serviceQualificationItem.state for all items on array ('+i+')',function(){",
+									"      pm.expect(element.state).to.be.a('string'); ",
+									"    ",
+									"   });",
+									"   pm.test('Response has serviceQualificationItem.id for all items on array ('+i+')',function(){",
+									"      pm.expect(element.id).to.be.a('string'); ",
+									"      i++;   ",
+									"   });",
+									"   ",
+									"});",
+									"",
+									"//Compare with post",
+									"pm.test('id from Get matches id from Post', function(){",
+									"   pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ1\"));",
+									"});",
+									"",
+									"pm.test('href from Get matches id from Post', function(){",
+									"   pm.expect(instance.href).to.equal(pm.globals.get(\"HREFSQ1\"));",
+									"});",
+									"",
+									"pm.test('serviceQualificationDate from Get matches serviceQualificationDate from Post', function(){",
+									"   pm.expect(instance.serviceQualificationDate).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONDATESQ1\"));",
+									"});",
+									"",
+									"pm.test('state from Get matches state from Post', function(){",
+									"   pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ1\"));",
+									"});",
+									"",
+									"pm.test('serviceQualificationItem from Get matches serviceQualificationItem from Post', function(){",
+									"    for (var i = 0; i < instance.serviceQualificationItem.length; i++){",
+									"        pm.expect(instance.serviceQualificationItem[i].id).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ1\")[i].id);",
+									"        pm.expect(instance.serviceQualificationItem[i].state).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ1\")[i].state);",
+									"    }",
+									"   ",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification/{{IDSQ1}}",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification",
+								"{{IDSQ1}}"
+							]
+						},
+						"description": "This operation retrieves a service qualification entity.\nAttribute selection is enabled for all first level attributes.\nFiltering on sub-resources may be available depending on the compliance level supported by an implementation.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "d999ac21-5dbf-4671-b484-348cb6985f25",
+			"name": "TC_ServiceQualification_N2 – Create new ServiceQualification with minimum set of parameters supported by server",
+			"item": [
+				{
+					"_postman_id": "bea011af-ae5b-44a2-8a09-d3ad72ad7725",
+					"name": "TC_N2_Create a service qualification",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f5c181fc-bfa4-44a1-966f-a4139b841148",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing POST method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Successful POST request', function() { pm.expect(pm.response.code).to.be.oneOf([201,202]) });",
+									"",
+									"",
+									"var instance = pm.response.json();",
+									"",
+									"",
+									"// Checking all remaining possible attributes for ServiceQualification, taken from the Swagger file",
+									"pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"pm.test('Response has href attribute', function() { pm.expect(instance.href).to.be.a('string'); });",
+									"pm.test('Response has serviceQualificationDate attribute', function() { pm.expect(instance.serviceQualificationDate).to.be.a('string'); });",
+									"pm.test('Response has state attribute', function() { pm.expect(instance.state).to.be.a('string'); });",
+									"pm.test('Response has serviceQualificationItem', function() { pm.expect(instance.serviceQualificationItem).to.be.an('array');});",
+									"var i = 0;",
+									"instance.serviceQualificationItem.forEach(function(element){",
+									"   ",
+									"   pm.test('Responde has serviceQualificationItem.state for all items on array ('+i+')',function(){",
+									"      pm.expect(element.state).to.be.a('string'); ",
+									"      i++;   ",
+									"   }",
+									"   ",
+									"   );",
+									"   ",
+									"});",
+									"",
+									"//set globals",
+									"pm.globals.set(\"IDSQ2\", instance.id);",
+									"pm.globals.set(\"HREFSQ2\", instance.href);",
+									"pm.globals.set(\"SERVICEQUALIFICATIONDATESQ2\", instance.serviceQualificationDate);",
+									"pm.globals.set(\"STATESQ2\", instance.state);",
+									"pm.globals.set(\"SERVICEQUALIFICATIONITEMSQ2\", instance.serviceQualificationItem);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"Maximum download/upload speed for access\",\n    \"expectedQualificationDate\": \"2017-10-25T12:13:16.361Z\",\n    \"provideAlternative\": true,\n    \"provideUnavailabilityReason\": false,\n    \"serviceQualificationItem\": [{\n        \"id\": \"1\",\n        \"expectedServiceAvailabilityDate\": \"2017-10-27T12:14:16.361Z\",\n        \"service\": {\n            \"serviceSpecification\": {\n                \"id\": \"111\",\n                \"href\": \"https://host:port/serviceCatalog/serviceSpecification/111\",\n                \"name\": \"CFS_Access\"\n            },\n            \"characteristic\": [{\n                    \"name\": \"downloadSpeed\",\n                    \"value\": \"\"\n                },\n                {\n                    \"name\": \"uploadSpeed\",\n                    \"value\": \"\"\n                }\n            ]\n        }\n    }]\n}"
+						},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification"
+							]
+						},
+						"description": "This operation creates a service qualification entity.\nMandatory and non mandatory attributes, additional rules and default values are provided in the specifications document.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "e0797deb-a40d-4d19-a2bc-0e913a43f372",
+					"name": "TC_N2_Get a serviceQualification by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4e4662b8-ca87-4bfe-8991-20704868e291",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing GET method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification/:id?fields={{fields}}",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Response code to good GET request', function() { pm.expect(pm.response.code).to.be.oneOf([200,206]) });",
+									"pm.test('GET response has valid JSON body', function() { pm.response.to.have.jsonBody() });",
+									"",
+									"",
+									"var instance = pm.response.json();",
+									"",
+									"",
+									"pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"pm.test('Response has href attribute', function() { pm.expect(instance.href).to.be.a('string'); });",
+									"pm.test('Response has serviceQualificationDate attribute', function() { pm.expect(instance.serviceQualificationDate).to.be.a('string'); });",
+									"pm.test('Response has state attribute', function() { pm.expect(instance.state).to.be.a('string'); });",
+									"pm.test('Response has serviceQualificationItem', function() { pm.expect(instance.serviceQualificationItem).to.be.an('array');});",
+									"var i = 0;",
+									"instance.serviceQualificationItem.forEach(function(element){",
+									"   ",
+									"   pm.test('Response has serviceQualificationItem.state for all items on array ('+i+')',function(){",
+									"      pm.expect(element.state).to.be.a('string'); ",
+									"    ",
+									"   });",
+									"   pm.test('Response has serviceQualificationItem.id for all items on array ('+i+')',function(){",
+									"      pm.expect(element.id).to.be.a('string'); ",
+									"      i++;   ",
+									"   });",
+									"   ",
+									"});",
+									"",
+									"//Compare with post",
+									"pm.test('id from Get matches id from Post', function(){",
+									"   pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ2\"));",
+									"});",
+									"",
+									"pm.test('href from Get matches id from Post', function(){",
+									"   pm.expect(instance.href).to.equal(pm.globals.get(\"HREFSQ2\"));",
+									"});",
+									"",
+									"pm.test('serviceQualificationDate from Get matches serviceQualificationDate from Post', function(){",
+									"   pm.expect(instance.serviceQualificationDate).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONDATESQ2\"));",
+									"});",
+									"",
+									"pm.test('state from Get matches state from Post', function(){",
+									"   pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ2\"));",
+									"});",
+									"",
+									"pm.test('serviceQualificationItem from Get matches serviceQualificationItem from Post', function(){",
+									"    for (var i = 0; i < instance.serviceQualificationItem.length; i++){",
+									"        pm.expect(instance.serviceQualificationItem[i].id).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ2\")[i].id);",
+									"        pm.expect(instance.serviceQualificationItem[i].state).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ2\")[i].state);",
+									"    }",
+									"   ",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification/{{IDSQ2}}",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification",
+								"{{IDSQ2}}"
+							]
+						},
+						"description": "This operation retrieves a service qualification entity.\nAttribute selection is enabled for all first level attributes.\nFiltering on sub-resources may be available depending on the compliance level supported by an implementation.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "eb1840d7-ce19-4b2c-b1f3-ce56ce37afef",
+			"name": "TC_ServiceQualification_N3 – Search for ServiceQualification with specific characteristics",
+			"item": [
+				{
+					"_postman_id": "3ad3a5b5-6a65-4fc6-a0b4-fcc9b85c5696",
+					"name": "TC_N3_Get all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "012b72ce-e214-49a4-9015-d5bbcc5ac766",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing GET method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification/:id?fields={{fields}}",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Response code to good GET request', function() { pm.expect(pm.response.code).to.be.oneOf([200,206]) });",
+									"pm.test('GET response has valid JSON body', function() { pm.response.to.have.jsonBody() });",
+									"",
+									"",
+									"var instance = pm.response.json();",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+									"  jsonData.forEach(function(instance, index) {",
+									"    pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"    pm.test('Response has href attribute', function() { pm.expect(instance.href).to.be.a('string'); });",
+									"    pm.test('Response has serviceQualificationDate attribute', function() { pm.expect(instance.serviceQualificationDate).to.be.a('string'); });",
+									"    pm.test('Response has state attribute', function() { pm.expect(instance.state).to.be.a('string'); });",
+									"    pm.test('Response has serviceQualificationItem', function() { pm.expect(instance.serviceQualificationItem).to.be.an('array');});",
+									"    var i = 0;",
+									"    instance.serviceQualificationItem.forEach(function(element){",
+									"       ",
+									"       pm.test('Response has serviceQualificationItem.state for all items on array ('+i+')',function(){",
+									"          pm.expect(element.state).to.be.a('string'); ",
+									"        ",
+									"       });",
+									"       pm.test('Response has serviceQualificationItem.id for all items on array ('+i+')',function(){",
+									"          pm.expect(element.id).to.be.a('string'); ",
+									"          i++;   ",
+									"       });",
+									"       ",
+									"    });",
+									"    ",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ1\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('href from Get matches id from Post', function(){",
+									"           pm.expect(instance.href).to.equal(pm.globals.get(\"HREFSQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('serviceQualificationDate from Get matches serviceQualificationDate from Post', function(){",
+									"           pm.expect(instance.serviceQualificationDate).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONDATESQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('serviceQualificationItem from Get matches serviceQualificationItem from Post', function(){",
+									"            for (var i = 0; i < instance.serviceQualificationItem.length; i++){",
+									"                pm.expect(instance.serviceQualificationItem[i].id).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ1\")[i].id);",
+									"                pm.expect(instance.serviceQualificationItem[i].state).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ1\")[i].state);",
+									"            }",
+									"           ",
+									"        });",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ2\")){",
+									"                ",
+									"        //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ2\"));",
+									"        });",
+									"        ",
+									"        pm.test('href from Get matches id from Post', function(){",
+									"           pm.expect(instance.href).to.equal(pm.globals.get(\"HREFSQ2\"));",
+									"        });",
+									"        ",
+									"        pm.test('serviceQualificationDate from Get matches serviceQualificationDate from Post', function(){",
+									"           pm.expect(instance.serviceQualificationDate).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONDATESQ2\"));",
+									"        });",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ2\"));",
+									"        });",
+									"        ",
+									"        pm.test('serviceQualificationItem from Get matches serviceQualificationItem from Post', function(){",
+									"            for (var i = 0; i < instance.serviceQualificationItem.length; i++){",
+									"                pm.expect(instance.serviceQualificationItem[i].id).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ2\")[i].id);",
+									"                pm.expect(instance.serviceQualificationItem[i].state).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ2\")[i].state);",
+									"            }",
+									"           ",
+									"        });",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    ",
+									"    ",
+									"  });",
+									"}",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification"
+							]
+						},
+						"description": "This operation retrieves a service qualification entity.\nAttribute selection is enabled for all first level attributes.\nFiltering on sub-resources may be available depending on the compliance level supported by an implementation.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "3170e28e-0422-47ac-8276-ca10ff7d4d2f",
+					"name": "TC_N3_Get a serviceQualification with DATESQ1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e4be140f-500f-4924-b72f-5da89078342b",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing GET method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification/:id?fields={{fields}}",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Response code to good GET request', function() { pm.expect(pm.response.code).to.be.oneOf([200,206]) });",
+									"pm.test('GET response has valid JSON body', function() { pm.response.to.have.jsonBody() });",
+									"",
+									"",
+									"var instance = pm.response.json();",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+									"  jsonData.forEach(function(instance, index) {",
+									"    pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"    pm.test('Response has href attribute', function() { pm.expect(instance.href).to.be.a('string'); });",
+									"    pm.test('Response has serviceQualificationDate attribute', function() { pm.expect(instance.serviceQualificationDate).to.be.a('string'); });",
+									"    pm.test('Response has state attribute', function() { pm.expect(instance.state).to.be.a('string'); });",
+									"    pm.test('Response has serviceQualificationItem', function() { pm.expect(instance.serviceQualificationItem).to.be.an('array');});",
+									"    var i = 0;",
+									"    instance.serviceQualificationItem.forEach(function(element){",
+									"       ",
+									"       pm.test('Response has serviceQualificationItem.state for all items on array ('+i+')',function(){",
+									"          pm.expect(element.state).to.be.a('string'); ",
+									"        ",
+									"       });",
+									"       pm.test('Response has serviceQualificationItem.id for all items on array ('+i+')',function(){",
+									"          pm.expect(element.id).to.be.a('string'); ",
+									"          i++;   ",
+									"       });",
+									"       ",
+									"    });",
+									"    ",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ1\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('href from Get matches id from Post', function(){",
+									"           pm.expect(instance.href).to.equal(pm.globals.get(\"HREFSQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('serviceQualificationDate from Get matches serviceQualificationDate from Post', function(){",
+									"           pm.expect(instance.serviceQualificationDate).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONDATESQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('serviceQualificationItem from Get matches serviceQualificationItem from Post', function(){",
+									"            for (var i = 0; i < instance.serviceQualificationItem.length; i++){",
+									"                pm.expect(instance.serviceQualificationItem[i].id).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ1\")[i].id);",
+									"                pm.expect(instance.serviceQualificationItem[i].state).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ1\")[i].state);",
+									"            }",
+									"           ",
+									"        });",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ2\")){",
+									"                ",
+									"       //For test porpouses, IDSQ2 is not supposed to be return by this filtered search",
+									"       pm.test(\"ID: \" + pm.globals.get(\"IDSQ2\") + \" shouldn't appear in this test\", function(){",
+									"          pm.expect(1).to.eql(0);",
+									"       });",
+									"       ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    ",
+									"    ",
+									"  });",
+									"}",
+									"",
+									"",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification?serviceQualificationDate=\"{{SERVICEQUALIFICATIONDATESQ1}}\"",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification"
+							],
+							"query": [
+								{
+									"key": "serviceQualificationDate",
+									"value": "\"{{SERVICEQUALIFICATIONDATESQ1}}\""
+								}
+							]
+						},
+						"description": "This operation retrieves a service qualification entity.\nAttribute selection is enabled for all first level attributes.\nFiltering on sub-resources may be available depending on the compliance level supported by an implementation.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "c0c18acf-5abf-4e6a-a637-69bd2279bd3a",
+			"name": "TC_ServiceQualification_N4 – Filtered retrieval of ServiceQualification",
+			"item": [
+				{
+					"_postman_id": "cb36e87c-be0d-4f1f-b9fc-f167673cf2ee",
+					"name": "{{ServiceQualificationAPI}}/serviceQualification/{{IDSQ1}}?fields=id,state,serviceQualificationItem.state",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "642712ef-7d5a-4695-a8c8-73bf8c4f5dcf",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing GET method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification/:id?fields={{fields}}",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Response code to good GET request', function() { pm.expect(pm.response.code).to.be.oneOf([200,206]) });",
+									"pm.test('GET response has valid JSON body', function() { pm.response.to.have.jsonBody() });",
+									"",
+									"",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+									"  jsonData.forEach(function(instance, index) {",
+									"",
+									"",
+									"    var requiredAttributes = [ 'id','state','serviceQualificationItem'];",
+									"    pm.test('Instance has all mandatory attributes', function() { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) } );",
+									"",
+									"    pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"    pm.test('Response has serviceQualificationItem', function() { pm.expect(instance.serviceQualificationItem).to.be.an('array');});",
+									"    var i = 0;",
+									"    instance.serviceQualificationItem.forEach(function(element){",
+									"       ",
+									"       pm.test('Response has serviceQualificationItem.state for all items on array ('+i+')',function(){",
+									"          pm.expect(element.state).to.be.a('string'); ",
+									"          i++;",
+									"       });",
+									"       ",
+									"       ",
+									"    });",
+									"    ",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ1\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ1\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('serviceQualificationItem.state from Get matches serviceQualificationItem.state from Post', function(){",
+									"            for (var i = 0; i < instance.serviceQualificationItem.length; i++){",
+									"                ",
+									"                pm.expect(instance.serviceQualificationItem[i].state).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ1\")[i].state);",
+									"            }",
+									"           ",
+									"        });",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ2\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id ' + pm.globals.get(IDSQ2) + \" shouldn't appear on this search\", function(){",
+									"           pm.expect(0).to.equal(1);",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    ",
+									"    ",
+									"  });",
+									"",
+									"",
+									"",
+									"",
+									"}",
+									"",
+									"else {",
+									"    ",
+									"    var instance = pm.response.json();",
+									"    var requiredAttributes = [ 'id','state','serviceQualificationItem'];",
+									"    pm.test('Instance has all mandatory attributes', function() { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) } );",
+									"",
+									"    pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"    pm.test('Response has serviceQualificationItem', function() { pm.expect(instance.serviceQualificationItem).to.be.an('array');});",
+									"    var i = 0;",
+									"    instance.serviceQualificationItem.forEach(function(element){",
+									"       ",
+									"       pm.test('Response has serviceQualificationItem.state for all items on array ('+i+')',function(){",
+									"          pm.expect(element.state).to.be.a('string'); ",
+									"          i++;",
+									"       });",
+									"       ",
+									"       ",
+									"    });",
+									"    ",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ1\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ1\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ1\"));",
+									"        });",
+									"        ",
+									"        pm.test('serviceQualificationItem.state from Get matches serviceQualificationItem.state from Post', function(){",
+									"            for (var i = 0; i < instance.serviceQualificationItem.length; i++){",
+									"                ",
+									"                pm.expect(instance.serviceQualificationItem[i].state).to.equal(pm.globals.get(\"SERVICEQUALIFICATIONITEMSQ1\")[i].state);",
+									"            }",
+									"           ",
+									"        });",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ2\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id ' + pm.globals.get(IDSQ2) + \" shouldn't appear on this search\", function(){",
+									"           pm.expect(0).to.equal(1);",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    ",
+									"    ",
+									"",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification/{{IDSQ1}}?fields=id,state,serviceQualificationItem.state",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification",
+								"{{IDSQ1}}"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "id,state,serviceQualificationItem.state"
+								}
+							]
+						},
+						"description": "This operation retrieves a service qualification entity.\nAttribute selection is enabled for all first level attributes.\nFiltering on sub-resources may be available depending on the compliance level supported by an implementation.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "616d317a-feea-4112-b1dd-52e43e9f5792",
+					"name": "{{ServiceQualificationAPI}}/serviceQualification/{{IDSQ2}}?fields=estimatedResponseDate,effectiveQualificationDate,id,state",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "23b0f1da-90df-4883-a469-345db36240bd",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing GET method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification/:id?fields={{fields}}",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Response code to good GET request', function() { pm.expect(pm.response.code).to.be.oneOf([200,206]) });",
+									"pm.test('GET response has valid JSON body', function() { pm.response.to.have.jsonBody() });",
+									"",
+									"",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+									"  jsonData.forEach(function(instance, index) {",
+									"",
+									"",
+									"    var requiredAttributes = [ 'id','state'];",
+									"    pm.test('Instance has all mandatory attributes', function() { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) } );",
+									"",
+									"    pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"    ",
+									"    ",
+									"   ",
+									"    ",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ2\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ2\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ2\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ1\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id ' + pm.globals.get(IDSQ1) + \" shouldn't appear on this search\", function(){",
+									"           pm.expect(0).to.equal(1);",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    ",
+									"    ",
+									"  });",
+									"}",
+									"",
+									"",
+									"",
+									"",
+									"else {",
+									"    ",
+									"    var instance = pm.response.json();",
+									"    var requiredAttributes = [ 'id','state'];",
+									"    pm.test('Instance has all mandatory attributes', function() { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) } );",
+									"",
+									"    pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"    ",
+									"    ",
+									"   ",
+									"    ",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ2\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ2\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ2\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ1\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id ' + pm.globals.get(IDSQ1) + \" shouldn't appear on this search\", function(){",
+									"           pm.expect(0).to.equal(1);",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    ",
+									"    ",
+									"    ",
+									"    ",
+									"    ",
+									"",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification/{{IDSQ2}}?fields=estimatedResponseDate,effectiveQualificationDate,id,state",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification",
+								"{{IDSQ2}}"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "estimatedResponseDate,effectiveQualificationDate,id,state"
+								}
+							]
+						},
+						"description": "This operation retrieves a service qualification entity.\nAttribute selection is enabled for all first level attributes.\nFiltering on sub-resources may be available depending on the compliance level supported by an implementation.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "c50ffadf-2849-4d59-ba22-8776639c66b2",
+			"name": "TC_ServiceQualification_N5 – Filtered Search and Filtered data response",
+			"item": [
+				{
+					"_postman_id": "79b8c230-2734-4b9a-a03d-853eb522da19",
+					"name": "TC_N5_Get by relatedParty.id and filter by id and state",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "051bbaf9-f569-4c37-aa56-c3ccad32215f",
+								"type": "text/javascript",
+								"exec": [
+									"// See: https://www.getpostman.com/docs/v6/postman/scripts/postman_sandbox_api_reference",
+									"// Testing GET method on {{scheme}}://{{host}}:{{port}}/tmf-api/serviceQualificationManagement/v3/serviceQualification/:id?fields={{fields}}",
+									"",
+									"pm.test('Content-Type is present', function() { pm.response.to.have.header('Content-Type') });",
+									"pm.test('Content-Type is application/json', function() { pm.response.headers.has('application/json') });",
+									"pm.test('Response code to good GET request', function() { pm.expect(pm.response.code).to.be.oneOf([200,206]) });",
+									"pm.test('GET response has valid JSON body', function() { pm.response.to.have.jsonBody() });",
+									"",
+									"",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"if (Array.isArray(jsonData) && (jsonData.length > 0)) {",
+									"  jsonData.forEach(function(instance, index) {",
+									"",
+									"",
+									"    var requiredAttributes = [ 'id','state'];",
+									"    pm.test('Instance has all mandatory attributes', function() { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) } );",
+									"",
+									"    pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"    pm.test('Response has state attribute', function() { pm.expect(instance.state).to.be.a('string'); });",
+									"    ",
+									"    ",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ1\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ1\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ1\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ2\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id ' + pm.globals.get(IDSQ2) + \" shouldn't appear on this search\", function(){",
+									"           pm.expect(0).to.equal(1);",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    ",
+									"    ",
+									"  });",
+									"",
+									"",
+									"",
+									"",
+									"}",
+									"",
+									"else {",
+									"    ",
+									"    var instance = pm.response.json();",
+									"    ",
+									"    var requiredAttributes = [ 'id','state'];",
+									"    pm.test('Instance has all mandatory attributes', function() { pm.expect(Object.keys(instance)).to.include.members(requiredAttributes) } );",
+									"",
+									"    pm.test('Response has id attribute', function() { pm.expect(instance.id).to.be.a('string'); });",
+									"    pm.test('Response has state attribute', function() { pm.expect(instance.state).to.be.a('string'); });",
+									"    ",
+									"    ",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ1\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id from Get matches id from Post', function(){",
+									"           pm.expect(instance.id).to.equal(pm.globals.get(\"IDSQ1\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        pm.test('state from Get matches state from Post', function(){",
+									"           pm.expect(instance.state).to.equal(pm.globals.get(\"STATESQ1\"));",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    if (instance.id == pm.globals.get(\"IDSQ2\")){",
+									"                ",
+									"                //Compare with post",
+									"        pm.test('id ' + pm.globals.get(IDSQ2) + \" shouldn't appear on this search\", function(){",
+									"           pm.expect(0).to.equal(1);",
+									"        });",
+									"        ",
+									"        ",
+									"        ",
+									"        ",
+									"    }",
+									"    ",
+									"    ",
+									"    ",
+									"  ",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification/{{IDSQ1}}?fields=id,state,relatedParty.id",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification",
+								"{{IDSQ1}}"
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "id,state,relatedParty.id"
+								}
+							]
+						},
+						"description": "This operation retrieves a service qualification entity.\nAttribute selection is enabled for all first level attributes.\nFiltering on sub-resources may be available depending on the compliance level supported by an implementation.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "7d1514b5-41d4-478c-b77e-721ab6874cc8",
+			"name": "TC_ServiceQualification_E1 – Unknown Trouble ServiceQualification identifier",
+			"item": [
+				{
+					"_postman_id": "77309a9c-43bd-44ee-ad97-388e8299e01b",
+					"name": "TC_E1_Get by inexistent ID and expect 404",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "00410eb8-d9f9-468c-bd11-3cb2d4a187c2",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is error\", function () {",
+									"    pm.response.to.be.error",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification/48484644468",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification",
+								"48484644468"
+							]
+						},
+						"description": "This operation retrieves a service qualification entity.\nAttribute selection is enabled for all first level attributes.\nFiltering on sub-resources may be available depending on the compliance level supported by an implementation.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "798d42d8-3c23-422e-90d3-4e7dbbf4105e",
+			"name": "TC_ServiceQualification_E2 – Invalid Request – Missing mandatory parameter",
+			"item": [
+				{
+					"_postman_id": "1eaebed3-ce25-467a-b95d-e8cb8995489a",
+					"name": "TC_E2_Post with missing mandatory parameters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b9434da-67ce-4256-92ed-9c4a0e416407",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is error\", function () {",
+									"    pm.response.to.be.error",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Deliver access and IPTV at a given address\",\n  \"expectedQualificationDate\": \"2017-10-01T12:13:16.361Z\",\n  \"provideAlternative\": true,\n  \"provideOnlyAvailable\": true,\n  \"provideUnavailabilityReason\": false,\n  \"relatedParty\": [\n    {\n      \"id\": \"15\",\n      \"href\": \"https://host:port/partyManagement/individual/15\",\n      \"role\": \"requester\",\n      \"name\": \"Mary Stuart\"\n    }\n  ],\n  \"serviceQualificationItem\": [\n    {\n      \"id\": \"1\",\n      \"expectedServiceAvailabilityDate\": \"2017-10-27T12:14:16.361Z\",\n      \"service\": {\n        \"serviceSpecification\":{\n          \"id\": \"111\",\n          \"href\":\n          \"https://host:port/serviceCatalog/serviceSpecification/111\",\n          \"name\": \"CFS_Access\"\n        },\n        \"characteristic\": [\n          {\n            \"name\": \"downloadSpeed\",\n            \"value\": \"\"\n          },\n          {\n            \"name\": \"uploadSpeed\",\n            \"value\": \"\"\n          }\n        ],\n        \"place\": [\n          {\n            \"role\": \"installationAddress\",\n            \"@referredType\": \"geographicAddress\",\n            \"geographicAddress\": {\n              \"streetNr\": \"160\",\n              \"streetName\": \"de Versailles\",\n              \"streetType\": \"Avenue\",\n              \"postcode\": \"75016\",\n              \"city\": \"Paris\",\n              \"country\": \"France\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"2\",\n      \"expectedServiceAvailabilityDate\": \"2017-10-27T12:14:16.361Z\",\n      \"service\": {\n        \"serviceSpecification\":{\n          \"id\": \"222\",\n          \"href\":\n          \"https://host:port/serviceCatalog/serviceSpecification/222\",\n          \"name\": \"CFS_IPTV\"\n        },\n        \"characteristic\": [\n          {\n            \"name\": \"4kEnabled\",\n            \"value\": \"true\"\n          }\n        ]\n      },\n      \"qualificationItemRelationship\": [\n        {\n          \"type\": \"reliesOn\",\n          \"id\": \"1\"\n        }\n      ]\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification"
+							]
+						},
+						"description": "This operation creates a service qualification entity.\nMandatory and non mandatory attributes, additional rules and default values are provided in the specifications document.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "bfa1609a-8e73-4f76-841c-7e754bcb7880",
+			"name": "TC_ServiceQualification _E3 – Invalid Request – Missing parameter mandatory in context",
+			"item": [
+				{
+					"_postman_id": "ea615391-2e63-4f39-9355-8d147276e6b7",
+					"name": "TC_E3_Post with missing mandatory Parameters in the context",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2476353a-b3a2-4332-ab80-67c46360bf67",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is error\", function () {",
+									"    pm.response.to.be.error",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json;charset=utf-8"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json;charset=utf-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Deliver access and IPTV at a given address\",\n  \"expectedQualificationDate\": \"2017-10-01T12:13:16.361Z\",\n  \"provideAlternative\": true,\n  \"provideOnlyAvailable\": true,\n  \"provideUnavailabilityReason\": false,\n  \"relatedParty\": [\n    {\n      \"id\": \"15\",\n      \"href\": \"https://host:port/partyManagement/individual/15\",\n      \"role\": \"requester\",\n      \"name\": \"Mary Stuart\"\n    }\n  ],\n  \"serviceQualificationItem\": [\n    {\n      \"id\": \"1\",\n      \"expectedServiceAvailabilityDate\": \"2017-10-27T12:14:16.361Z\",\n      \"service\": {\n        \"serviceSpecification\":{\n          \"id\": \"111\",\n          \"href\":\n          \"https://host:port/serviceCatalog/serviceSpecification/111\",\n          \"name\": \"CFS_Access\"\n        },\n        \"characteristic\": [\n          {\n            \"name\": \"downloadSpeed\",\n            \"value\": \"\"\n          },\n          {\n            \"name\": \"uploadSpeed\",\n            \"value\": \"\"\n          }\n        ],\n        \"place\": [\n          {\n            \"role\": \"installationAddress\",\n            \"@referredType\": \"geographicAddress\",\n            \"geographicAddress\": {\n              \"streetNr\": \"160\",\n              \"streetName\": \"de Versailles\",\n              \"streetType\": \"Avenue\",\n              \"postcode\": \"75016\",\n              \"city\": \"Paris\",\n              \"country\": \"France\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"2\",\n      \"expectedServiceAvailabilityDate\": \"2017-10-27T12:14:16.361Z\",\n      \"service\": {\n        \"serviceSpecification\":{\n          \"id\": \"222\",\n          \"href\":\n          \"https://host:port/serviceCatalog/serviceSpecification/222\",\n          \"name\": \"CFS_IPTV\"\n        },\n        \"characteristic\": [\n          {\n            \"name\": \"4kEnabled\",\n            \"value\": \"true\"\n          }\n        ]\n      },\n      \"qualificationItemRelationship\": [\n        {\n          \"type\": \"reliesOn\",\n          \"id\": \"1\"\n        }\n      ]\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{ServiceQualificationAPI}}/serviceQualification",
+							"host": [
+								"{{ServiceQualificationAPI}}"
+							],
+							"path": [
+								"serviceQualification"
+							]
+						},
+						"description": "This operation creates a service qualification entity.\nMandatory and non mandatory attributes, additional rules and default values are provided in the specifications document.\n\nSpecific business errors for current operation will be encapsulated in\n\nHTTP Response 422 Unprocessable entity\n"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
